@@ -1,5 +1,4 @@
 // 包含 n 个操作数据库集合数据的 Model 模块
-const md5 = require('blueimp-md5')
 const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://localhost:27017/recruitmentserver', { useNewUrlParser: true })
@@ -23,14 +22,5 @@ const userSchema = mongoose.Schema({
 
 // 集合名称
 const UserModel = mongoose.model('users', userSchema)
-
-function userSave() {
-  // 创建UserModel实例
-  const userModel = new UserModel({userName: 'Kai', password: md5('123'), type: 'personnel'})
-  // 保存
-  userModel.save(function(error, user) {
-    console.log('save()', error, user)
-  })
-}
 
 exports.UserModel = UserModel
