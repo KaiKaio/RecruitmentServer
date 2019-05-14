@@ -28,4 +28,23 @@ function testSave() {
   })
 }
 
-testSave()
+function testFind() {
+  UserModel.find(function(error, users) { // 没有匹配为 []
+    console.log('find()', error, users)
+  })
+  UserModel.findOne({_id:'5cdacc02318fe7e301589270'}, function(error, user) { // 没有匹配为 null
+    console.log('findOne()', error, user)
+  })
+}
+
+function testUpdate() {
+  UserModel.findByIdAndUpdate({_id:'5cdacc02318fe7e301589270'}, {userName: 'KaiKaiYa'}, function(error, oldUser) {
+    console.log('findByIdAndUpdate()', error, oldUser)
+  })
+}
+
+function testDelete() {
+  UserModel.remove({_id:'5cdacc02318fe7e301589270'}, function(error, olduser) {
+    console.log('remove()', error, olduser)
+  })
+}
