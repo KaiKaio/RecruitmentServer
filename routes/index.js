@@ -36,4 +36,22 @@ router.post('/login', function(req, res) {
   })
 })
 
+router.post('/update', function(req, res) {
+  const userid = req.cookies.userid
+  if(!userid) {
+    return res.send({code:1, msg: '请先登录'})
+  }
+  const user = req.body
+  UserModel.findByIdAndUpdate({_id: userid}, user, function(error, oldUserInfo) {
+    if(!oldUserInfo) {
+      res.clearCookie('userid') 
+    } else {
+      const {_id, userName, type} = oldUserInfo
+      const data = Object.assign(user, {_id, userName, type})
+      res.send({code: 0, data})
+    }
+  })
+})
+
+
 module.exports = router;
