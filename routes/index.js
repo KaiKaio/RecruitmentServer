@@ -2,7 +2,7 @@ var express = require('express');
 const md5 = require('blueimp-md5')
 var router = express.Router();
 
-const { UserModel } = require('../db/models')
+const { UserModel, chatModel } = require('../db/models')
 const filter = {password: 0, __v: 0} // 指定过滤属性
 
 router.get('/', function(req, res, next) {
@@ -67,6 +67,20 @@ router.get('/userlist', function(req, res) {
   const { type } = req.query
   UserModel.find({type}, filter, function(error, users) {
     res.send({code: 0, data: users})
+  })
+})
+
+router.get('./msglist', function(req, res) {
+  const userid = req.cookies.userid
+  UserModel.find(function(err, userDocs) {
+    const users = {}
+    userDocs.forEach(user=> {
+      users[user._id] = {userName: user.userName, avatar: user.avatar}
+    })
+
+    users.reduce((users, user)=> {
+      users
+    }, {})
   })
 })
 module.exports = router;

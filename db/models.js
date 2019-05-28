@@ -20,7 +20,18 @@ const userSchema = mongoose.Schema({
 
 })
 
+const chatSchema = mongoose.Schema({
+  from: {type: String, required: true},
+  to: {type: String, required: true},
+  chat_id: {type: String, required: true},
+  content: {type: String, required: true},
+  read: {type: Boolean, required: false},
+  create_time: {type: Number},
+})
+
 // 集合名称
 const UserModel = mongoose.model('users', userSchema)
+const ChatModel = mongoose.model('chat', chatSchema)
 
 exports.UserModel = UserModel
+exports.chatModel = ChatModel
