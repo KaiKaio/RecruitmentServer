@@ -73,14 +73,25 @@ router.get('/userlist', function(req, res) {
 router.get('./msglist', function(req, res) {
   const userid = req.cookies.userid
   UserModel.find(function(err, userDocs) {
-    const users = {}
-    userDocs.forEach(user=> {
+    const users = userDocs.reduce((users, user)=> {
       users[user._id] = {userName: user.userName, avatar: user.avatar}
-    })
-
-    users.reduce((users, user)=> {
-      users
+      return users
     }, {})
+
+    chatModel.find({'$or': [{from: userid}, {to: userid}] }, filter, function(err, chatMsgs) {
+      res.send({code: 0, data: {users, chatMsgs}})
+    })
   })
 })
+
+router.post('/readmsg', function(req, res) {
+  const from = req.body.from
+  const to = req.cookie.userid
+
+  chatModel.update({from, to, read: false}, {read: true}, {multi: true}, function(err, doc) {
+    console.log('./readmsg', doc)
+    res.send({code: 0, data: doc.nModified})
+  })
+})
+
 module.exports = router;
