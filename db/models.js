@@ -25,7 +25,7 @@ const chatSchema = mongoose.Schema({
   to: {type: String, required: true},
   chat_id: {type: String, required: true},
   content: {type: String, required: true},
-  read: {type: Boolean, required: false},
+  read: {type: Boolean, default: false},
   create_time: {type: Number},
 })
 
@@ -34,4 +34,4 @@ const UserModel = mongoose.model('users', userSchema)
 const ChatModel = mongoose.model('chat', chatSchema)
 
 exports.UserModel = UserModel
-exports.chatModel = ChatModel
+exports.ChatModel = ChatModel
