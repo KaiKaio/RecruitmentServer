@@ -2,7 +2,7 @@ var express = require('express');
 const md5 = require('blueimp-md5')
 var router = express.Router();
 
-const { UserModel, chatModel } = require('../db/models')
+const { UserModel, ChatModel } = require('../db/models')
 const filter = {password: 0, __v: 0} // 指定过滤属性
 
 router.get('/', function(req, res, next) {
@@ -70,7 +70,7 @@ router.get('/userlist', function(req, res) {
   })
 })
 
-router.get('./msglist', function(req, res) {
+router.get('/msglist', function(req, res) {
   const userid = req.cookies.userid
   UserModel.find(function(err, userDocs) {
     const users = userDocs.reduce((users, user)=> {
@@ -78,7 +78,7 @@ router.get('./msglist', function(req, res) {
       return users
     }, {})
 
-    chatModel.find({'$or': [{from: userid}, {to: userid}] }, filter, function(err, chatMsgs) {
+    ChatModel.find({'$or': [{from: userid}, {to: userid}] }, filter, function(err, chatMsgs) {
       res.send({code: 0, data: {users, chatMsgs}})
     })
   })
@@ -88,7 +88,7 @@ router.post('/readmsg', function(req, res) {
   const from = req.body.from
   const to = req.cookie.userid
 
-  chatModel.update({from, to, read: false}, {read: true}, {multi: true}, function(err, doc) {
+  ChatModel.update({from, to, read: false}, {read: true}, {multi: true}, function(err, doc) {
     console.log('./readmsg', doc)
     res.send({code: 0, data: doc.nModified})
   })
